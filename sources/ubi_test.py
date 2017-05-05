@@ -21,6 +21,9 @@ rgtVar = api.get_variable('58eedca376254207a757bd06')
 
 try:
     while(1):
+        # Begin timing
+        time_b = time.time()
+        
         # Get commands
         last_fwdVar = fwdVar.get_values(1)
         last_fwdCmd = last_fwdVar[0]['value']
@@ -34,13 +37,13 @@ try:
         last_rgtVar = rgtVar.get_values(1)
         last_rgtCmd = last_rgtVar[0]['value']
         
-        print ("FORWARD COMMAND IS")
+        print ("Forward command is")
         print (last_fwdCmd)
-        print ("BACKWARD COMMAND IS")
+        print ("Backward command is")
         print (last_bwdCmd)
-        print ("TURN-LEFT COMMAND IS")
+        print ("Turn-left command is")
         print (last_lftCmd)        
-        print ("TURN-RIGHT COMMAND IS")
+        print ("Turn-right command is")
         print (last_rgtCmd)
 
         # Contorl arduino's movement
@@ -55,15 +58,20 @@ try:
         elif last_lftCmd == 1:
             serial.write('l')
             print('Turn left')
-            bwdVar.save_value({"value":0})
+            lftVar.save_value({"value":0})
         elif last_rgtCmd == 1:
             serial.write('r')
             print('Turn right')
-            bwdVar.save_value({"value":0})
+            rgtVar.save_value({"value":0})
         elif last_fwdCmd == 0 and last_bwdCmd == 0 and last_lftCmd == 0 and last_rgtCmd == 0:
             serial.write('s')
             print('Stopped')
-            
-        time.sleep(1)
+
+        # End timing
+        time_e = time.time()
+        print("Network transmission time")
+        print(time_e - time_b)
+        print('---One cycle---')    
+
 except:
     serial.close()
